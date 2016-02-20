@@ -1,8 +1,7 @@
-# Fully Dressed Use Cases
-This document outlines the 16 Fully Dressed Use Cases for the Collaborative Music Player
+# Supplementary Specifications
+This document outlines the 4 Non-Functional Requirements for the Collaborative Music Player
 
-# Use Case 1
-blah blah
+# Non Functional Requirement 1: 
 
-# Use Case 2
-blah blah
+# Non Functional Requirement 2:
+
