@@ -1,0 +1,9 @@
+{
+  "firebase": "collabplayer",
+  "public": "public",
+  "ignore": [
+    "firebase.json",
+    "**/.*",
+    "**/node_modules/**"
+  ]
+}
