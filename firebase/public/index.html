@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="LoginForm.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+<script src="https://cdn.firebase.com/js/client/2.4.2/firebase.js"></script>
+<script>
+
+  function firebase_auth_user() {    
+      var ref = new Firebase("https://collabplayer.firebaseio.com");
+      ref.authWithPassword({
+          email    : $('#inputEmail').val(),
+          password : $('#inputPassword').val()
+  }, function(error, authData) { 
+          if (error){
+              switch (error.code) {
+              case "INVALID_EMAIL":
+                alert("The specified user account email is invalid.");
+                break;
+              case "INVALID_PASSWORD":
+                alert("The specified user account password is incorrect.");
+                break;
+              case "INVALID_USER":
+                alert("The specified user account does not exist.");
+                break;
+              default:
+                alert("Error logging user in:", error);
+              }
+          } else { 
+              window.location.href = "main.html";}}, 
+      {remember: "sessionOnly"});  
+  };
+
+  $(document).ready(function(){ 
+      $("#login_button").click(function(){
+          firebase_auth_user();
+      });
+  })
+
+  $('.message a').click(function(){
+   $('form').animate({height: "toggle", opacity: "toggle"}, "slow");
+  });
+</script>
+
+</head>
+<body>
+<div class="login-page">
+  <div class="form">
+    <form class="register-form">
+      <input type="text" placeholder="name"/>
+      <input type="password" placeholder="password"/>
+      <input type="text" placeholder="email address"/>
+      <button>create</button>
+      <p class="message">Already registered? <a href="#">Sign In</a></p>
+    </form>
+    <form class="login-form" action="#">
+      <input id="inputEmail" type="text" placeholder="username"/>
+      <input id="inputPassword" type="password" placeholder="password"/>
+    </form>
+    <button id="login_button">login</button>
+    <p class="message">Not registered? <a href="#">Create an account</a></p>
+  </div>
+</div>
+</body>
+</html>
