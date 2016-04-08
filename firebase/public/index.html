@@ -1,0 +1,315 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en_US" xml:lang="en_US">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <meta http-equiv="Content-Language" content="en_US" />
+
+<script type="text/javascript" language="JavaScript">
+	        	var portal = { 
+		"loggedIn": false,
+		"portalPath": "https://scholar.vt.edu/portal",
+		"loggedOutUrl": "https://scholar.vt.edu/portal",
+        "siteId": "",
+        "locale": "en_US",
+		"user": {
+			"id": "",
+			"eid": ""
+		},
+		"timeoutDialog" : {
+			"enabled": true,
+			"seconds": 300
+		},
+		"toggle" : {
+			"allowauto": true,
+			"tools": true,
+			"sitenav": false
+		}
+	};
+</script>
+
+<!-- this causes problems for layout needs investigating -->
+    <link href="/portal/styles/portalstyles.css" type="text/css" rel="stylesheet" media="all" />
+<!--[if gte IE 5]><![if lt IE 7]>
+    <link href="/portal/styles/portalstyles-ie5.css" type="text/css" rel="stylesheet" media="all" />
+<![endif]><![endif]-->
+<link href="/library/skin/neo-default/portal.css" type="text/css" rel="stylesheet" media="all" />
+
+
+    <title>Scholar : Gateway : Welcome</title>
+<link href="/library/skin/tool_base.css" type="text/css" rel="stylesheet" media="all" />
+<link href="/library/skin/neo-default/tool.css" type="text/css" rel="stylesheet" media="all" />
+
+     <script type="text/javascript" language="JavaScript" src="/library/js/headscripts.js"></script>
+     <script type="text/javascript" language="JavaScript" src="/library/js//jquery/1.7.1/jquery-1.7.1.min.js"></script>
+     <script type="text/javascript" language="JavaScript" src="/library/js//trimpath-template-latest.js"></script>
+
+<script type="text/javascript" language="JavaScript" src="/portal/scripts/neoscripts.js"></script>
+<script type="text/javascript" language="JavaScript" src="/library/js/jquery/qtip/jquery.qtip-latest.min.js"></script>
+<script type="text/javascript" language="JavaScript" src="/library/js/jquery/qtip/tutorial.js"></script>
+<script type="text/javascript" language="JavaScript" src="/library/js/jquery/cluetip/1.2.5/jquery.cluetip.min.js"></script>
+
+<link href="/library/js/jquery/cluetip/1.2.5/css/jquery.cluetip.css" type="text/css" rel="stylesheet" media="all" />
+
+
+</head>
+<body class="portalBody">
+  <noscript><div id="portal_js_warn">Sakai works much better when JavaScript is enabled. Please enable JavaScript in your Browser.</div></noscript>
+<script type="text/javascript" language="JavaScript">
+	var sakaiPortalWindow = "";
+  $(document).ready(function() {
+			setupSkipNav();
+    });
+	</script>
+<!-- END Header -->
+<script type="text/javascript">
+    $(document).ready(function() {
+
+        var toggleClass=""
+                    toggleClass="toggleTools"
+                				setupToolToggle(toggleClass);
+    });
+</script>
+<!-- site.vm -->
+
+<!-- start includeSiteNav -->
+<div id="portalOuterContainer">
+        <div id="portalContainer"  >
+		
+		<div id="headerMin">
+			<div id="skipNav">
+			
+				<a href="#tocontent"  class="skip internalSkip" title="jump to content" accesskey="c">
+				jump to content
+				</a>
+				<a href="#totoolmenu"  class="skip internalSkip" title="jump to tools list" accesskey="l">
+					jump to tools list
+				</a>
+			</div>
+			
+			<div id="siteNavWrapper" class="undeterminedSiteType">
+				<div id="mastHead" role="banner">
+					<div id="mastLogo">
+                                         <img title="Logo" alt="Logo" src="/library/skin/neo-default/images/logo_back.png" />
+					</div>
+                                        <div id="mastCanvas">
+                                                   <a href="https://canvas.vt.edu"  title="Canvas" id="loginCanvas" >GO TO CANVAS</a>
+                                           </div>
+					<!-- login component -->
+					<div id="mastLogin">
+											<div id="loginLinks">
+													<a href="https://scholar.vt.edu/portal/login" title="VT Login" id="loginLink1" >VT Login</a>
+																											<a href="/portal/xlogin" title="Guest Login" id="loginLink2" >Guest Login</a>
+																			</div>
+										</div>
+					<!-- end login component -->
+				</div>
+			</div>
+			<div class="divColor" id="tabBottom">
+				<br />
+			</div>
+		</div>
+
+		
+<!-- START from includePageWithNav.vm -->
+
+<div id="container"  >
+
+
+	<!-- START from includePageNav.vm -->
+		<!-- start includePageNav -->
+			<div class="divColor" id="toolMenuWrap">
+				<div id="worksiteLogo">
+													</div>
+                        				<h1 class="skip" id="totoolmenu">Tools list begins here</h1>
+				<div id="toolMenu" role="navigation" aria-label="Tools list begins here">
+					<ul>
+					  								<li class="selectedTool">
+							<a class="toolMenuLink " title="Welcome" role="presentation" aria-disabled="true">
+							<span class="toolMenuIcon icon-sakai-motd ">Welcome</span>
+							</a>
+						</li>
+		  							  				  			 						<li>
+							<a class="toolMenuLink " href="https://scholar.vt.edu/portal/site/!gateway/page/1fdf36a0-f828-44ef-81e8-4b6173d91b7d" title="For accessing an external website within the site">
+							<span class="toolMenuIcon icon-sakai-iframe ">ePortfolio Information</span>
+							</a>
+						</li>
+		   					  														 <li>
+								<a class="toolMenuLink" accesskey="6" href="https://scholar.vt.edu/portal/help/main" target="_blank" 
+									onclick="openWindow('https://scholar.vt.edu/portal/help/main', 
+									'Help', 'resizable=yes,toolbar=no,scrollbars=yes,menubar=yes,width=800,height=600'); 
+									return false" title="Help">
+								<span class="toolMenuIcon icon-sakai-help">Help</span>
+								<span class="skip">Opens in a new window</span> </a>
+								</a>
+						 </li>
+								</ul>
+				</div>
+				
+			<!-- Add subsite lists -->
+			
+
+			</div>
+			<div id="togglebar">
+			</div>
+			<h1 class="skip" id="tocontent">Content begins here</h1>
+		<!-- end includePageNav -->
+		<!-- end page nav -->
+<!-- END from includePageNav.vm -->
+
+
+<!-- START from includePageBody.vm -->
+					<div id="content" role="main">
+		
+
+				<div id="col1of2">
+												<!-- start Tool -->
+                                            													<div class="portletTitleWrap">
+								<div class="portletTitle">
+									<div class="title">
+																<h2>Message of the day</h2>
+									</div>
+									<div class="action">
+																																	<a href="https://scholar.vt.edu/portal/help/main?help=sakai.announcements" title="Help for Message of the day" 
+								 target="_blank" onclick="openWindow('https://scholar.vt.edu/portal/help/main?help=sakai.announcements', 'Help',
+								  'resizable=yes,toolbar=no,scrollbars=yes,menubar=yes,width=800,height=600'); return false">
+								
+																<img src="/library/image/transparent.gif"  alt="Help for Message of the day" border="0" />
+									<span class="skip">Opens in a new window</span> </a>
+															</div>
+								</div>
+							</div>
+																<!-- end Tool -->
+					<!-- start Tool Body -->						
+													<div class="portletMainWrap">
+							    <iframe	name="Mainxgatewayx110"
+	id="Mainxgatewayx110"
+	title="Message of the day "
+	class ="portletMainIframe"
+	height="475"
+	width="100%"
+	frameborder="0"
+	marginwidth="0"
+	marginheight="0"
+	scrolling="auto"
+	src="https://scholar.vt.edu/portal/tool/!gateway-110?panel=Main">
+</iframe>
+							</div>
+											<!-- end Tool Body -->												
+											</div>
+							<div id="col2of2">
+														<!-- start include tool -->
+					<!-- start Tool Col2 -->
+													<div class="portletTitleWrap">
+								<div class="portletTitle">
+									<div class="title">
+												                <a href="https://scholar.vt.edu/portal/tool-reset/aac10d83-d00a-426e-9f14-6d23bbf4b9d8/?panel=Main" target="Mainaac10d83xd00ax426ex9f14x6d23bbf4b9d8" title="Reset">
+						                        <img src="/library/image/transparent.gif" alt="Reset" border="1" /></a>
+																<h2>Reset Guest Login Password</h2>
+									</div>
+									<div class="action">
+																																	<a href="https://scholar.vt.edu/portal/help/main?help=sakai.resetpass" title="Help for Reset Guest Login Password" 
+								 target="_blank" onclick="openWindow('https://scholar.vt.edu/portal/help/main?help=sakai.resetpass', 'Help',
+								  'resizable=yes,toolbar=no,scrollbars=yes,menubar=yes,width=800,height=600'); return false">
+																<img src="/library/image/transparent.gif"  alt="Help for Reset Guest Login Password"  border="0" />
+										<span class="skip">Opens in a new window</span> </a>
+
+															</div>
+								</div>
+							</div>
+											<!-- end Tool Col2 -->
+					<!-- start Tool Body -->
+													<div class="portletMainWrap">
+							    <iframe	name="Mainaac10d83xd00ax426ex9f14x6d23bbf4b9d8"
+	id="Mainaac10d83xd00ax426ex9f14x6d23bbf4b9d8"
+	title="Reset Guest Login Password "
+	class ="portletMainIframe"
+	height="475"
+	width="100%"
+	frameborder="0"
+	marginwidth="0"
+	marginheight="0"
+	scrolling="auto"
+	src="https://scholar.vt.edu/portal/tool/aac10d83-d00a-426e-9f14-6d23bbf4b9d8?panel=Main">
+</iframe>
+							</div>
+											<!-- end Tool Body -->												
+					<!-- end include tool -->
+																			<!-- start include tool -->
+					<!-- start Tool Col2 -->
+													<div class="portletTitleWrap">
+								<div class="portletTitle">
+									<div class="title">
+																<h2>Getting Help With Scholar</h2>
+									</div>
+									<div class="action">
+																																	<a href="https://scholar.vt.edu/portal/help/main?help=sakai.iframe" title="Help for Getting Help With Scholar" 
+								 target="_blank" onclick="openWindow('https://scholar.vt.edu/portal/help/main?help=sakai.iframe', 'Help',
+								  'resizable=yes,toolbar=no,scrollbars=yes,menubar=yes,width=800,height=600'); return false">
+																<img src="/library/image/transparent.gif"  alt="Help for Getting Help With Scholar"  border="0" />
+										<span class="skip">Opens in a new window</span> </a>
+
+															</div>
+								</div>
+							</div>
+											<!-- end Tool Col2 -->
+					<!-- start Tool Body -->
+													<div class="portletMainWrap">
+							    <iframe	name="Mainb72ef907x44a9x4146x8788x689544bdfed9"
+	id="Mainb72ef907x44a9x4146x8788x689544bdfed9"
+	title="Getting Help With Scholar "
+	class ="portletMainIframe"
+	height="475"
+	width="100%"
+	frameborder="0"
+	marginwidth="0"
+	marginheight="0"
+	scrolling="auto"
+	src="https://scholar.vt.edu/portal/tool/b72ef907-44a9-4146-8788-689544bdfed9?panel=Main">
+</iframe>
+							</div>
+											<!-- end Tool Body -->												
+					<!-- end include tool -->
+													</div>
+						</div>
+
+			<div>
+			<!-- include bottom -->
+						<div id="footer" role="contentinfo">
+				<div class="footerExtNav">
+					<ul id="footerLinks"><li><span><a href="http://tlos.vt.edu" target="_blank">Technology-enhanced Learning and Online Strategies</a></span></li><li><span><a href="http://www.vt.edu/acceptable_use.php" target="_blank">Using this site means that you accept its terms</a></span></li><li><span><a href="https://vt4help.service-now.com/ess/" target="_blank">For assistance, contact 4Help</a></span></li></ul>
+				</div>
+				<div id="footerInfo">
+								<a href="http://www.vt.edu" target="_blank">
+					 <img border="0" src="/library/image/sakai_powered.gif" alt="Virginia Tech" />
+					 <span class="skip"> (Opens in a new window)</span>
+					</a>
+						<!-- end include Bottom -->
+				</div>
+				<div class="sakaiCopyrightInfo"> 
+					 Acceptable Use of Scholar is governed by Virginia Tech's <a href="http://www.policies.vt.edu/7000.pdf">Policy 7000: Acceptable Use and Administration of Computer and Communication Systems.</a><br />
+                     All Scholar logins, transactions and IP addresses are routinely logged for security, authentication and Honor System purposes. Your work is confidential, private and logged.<br />
+                    			  
+					<br/>
+					Copyright 2016 Virginia Polytechnic Institute and State University
+					<br />
+					Scholar - 20160327 - Sakai 2.9.0 (Kernel 1.3.0)- Server tamale
+				</div>
+
+
+
+
+					</div>
+					<!-- end includePageBody -->
+<!-- END from includePageBody.vm -->
+<div id="tutorial"></div>
+	</div>
+<!-- END from includePageWithNav.vm -->
+
+	</div>
+</div>
+<!-- end includeSiteNav -->
+<!-- end site.vm -->
+	</body>
+</html>
