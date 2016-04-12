@@ -1,0 +1,47 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Apr 10, 2016, 7:47:14 PM
+    Author     : Luke
+*/
+
+th, tr {
+    border: 1px solid black;
+    height: 100%
+}
+
+button { 
+    width: 100%;
+}
+
+table {
+      width: 100%;
+}
+
+#widget {
+    height: 25%;
+}
+
+#player {
+    width: 100%;
+    height: 100%;
+}
+
+
+#body {
+    width: 75%;
+}
+
+
+#songqueue {
+    width: 100%;
+}
+
+#songinput {
+    position: relative;
+    width: 100%;
+    
+}

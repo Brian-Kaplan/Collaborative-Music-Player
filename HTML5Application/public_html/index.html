@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>MusicCollab</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="default.css">
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+        <script src="http://w.soundcloud.com/player/api.js"></script>
+        <script src="main.js"></script>
+    </head>
+    <body>
+        <div id="widget">
+            <iframe id="player" scrolling="no" frameborder="no"></iframe>
+        </div>
+        <div id="body">
+            <table id="songqueue">
+                <tr>
+                    <th>Credits</th>
+                    <th>Song Name</th>
+                    <th>Length</th>
+                </tr>
+            </table>
+            <table>
+                <tr>
+                    <td><input id="songinput" type="text" name="song link"></td>
+                    <td><button id="submitbutton" type="button"><label>submit</label></button></td>
+                </tr>
+            </table>
+        </div>
+        
+    </body>
+</html>
