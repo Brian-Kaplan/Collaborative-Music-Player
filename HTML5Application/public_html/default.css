@@ -32,16 +32,23 @@ table {
 
 
 #body {
-    width: 75%;
+    width: 100%;
 }
 
 
-#songqueue {
-    width: 100%;
+#songqueuediv {
+    float: left;
+    width: 75%;
 }
 
 #songinput {
     position: relative;
     width: 100%;
     
+}
+
+#users {
+    position: relative;
+    width: 25%;
+    float: right;
 }
