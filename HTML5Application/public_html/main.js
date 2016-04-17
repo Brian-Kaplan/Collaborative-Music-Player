@@ -21,10 +21,13 @@ submitbutton.onclick = function() {
     if(player.src === '') {
         var embedurl = "https://w.soundcloud.com/player/?url="+ songinput.value +"&amp;auto_play=false&amp;hide_related=false&amp;show_comments=true&amp;show_user=true&amp;show_reposts=false&amp;visual=false";
         player.src = embedurl;
+        queueSong(0,songinput.value,'00:00');
         songinput.value = '';
     }
     else {
         queueSong(0,songinput.value,'00:00');
+        var embedurl = "https://w.soundcloud.com/player/?url="+ songinput.value +"&amp;auto_play=false&amp;hide_related=false&amp;show_comments=true&amp;show_user=true&amp;show_reposts=false&amp;visual=false";
+        player.src = embedurl;
         songinput.value = '';
     }
 };      
@@ -38,7 +41,18 @@ function queueSong(credits,songname,length) {
         newRow.insertCell(2).innerHTML = '00:00';
 }
 
+function loadQueue(queue) {
+    var i = 0;
+    for(i = 0;i < queue.length;i++) {
+        queueSong(queue.credits,queue.songname,queue.length);
+    }
+}
+
 function dequeSong() {
     songqueue.deleteRow(0);
 }
 
+//plays next song in queue
+function nextSong() {
+    
+}
