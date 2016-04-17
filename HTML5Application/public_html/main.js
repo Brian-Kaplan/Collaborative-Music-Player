@@ -8,6 +8,7 @@
     var songinput;
     var player;
     var songqueue;
+    var users;
 
 $(document).ready(function() {
     //init variables
@@ -15,6 +16,7 @@ $(document).ready(function() {
     songinput = document.getElementById('songinput');
     player = document.getElementById('player');
     songqueue = $('#songqueue')[0];
+    users = $('#users')[0];
 
 //onclick listener
 submitbutton.onclick = function() {
@@ -40,5 +42,11 @@ function queueSong(credits,songname,length) {
 
 function dequeSong() {
     songqueue.deleteRow(0);
+}
+
+function loadUsers(username, credits) {
+    newRow = users.insertRow(-1);
+    newRow.insertCell(0).innerHTML = 'Jimmy';
+    newRow.insertCell(1).innerHTML = 0;
 }
 
