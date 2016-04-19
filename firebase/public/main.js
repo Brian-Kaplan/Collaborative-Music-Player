@@ -3,6 +3,13 @@
  * Created By: Luke Mazzu
  */
 
+/*
+ * Create a listener for the queue, and users
+ * Updating the queue when a song finishes
+ * Adding a song to the queue
+ * 
+ */
+
 //global variables
     var submitbutton;
     var songinput;
@@ -19,15 +26,26 @@ $(document).ready(function() {
     songqueue = $('#songqueue')[0];
     users = $('#users')[0];
 
+var ref = new Firebase("https://dinosaur-facts.firebaseio.com/dinosaurs");
+ref.orderByChild("height").on("child_added", function(snapshot) {
+  console.log(snapshot.key() + " was " + snapshot.val().height + " meters tall");
+});
+
+//load users and create listener for changes
+
+//load queue and create listener for changes
+
 //onclick listener
 submitbutton.onclick = function() {
     if(songinput.value !== '') {
     if(player.src === '') {
+        //TODO: add song to queue in database
         loadPlayer(songinput.value);
         songinput.value = '';
     }
     else {
         queueSong(0,songinput.value,'00:00');
+        //TODO: add song to queue in database
         songinput.value = '';
     }
     }
@@ -51,9 +69,9 @@ function loadPlayer(songurl) {
 //songname currently is song url from soundcloud
 function queueSong(credits,songname,length) {
         newRow = songqueue.insertRow(-1);
-        newRow.insertCell(0).innerHTML = 0;
+        newRow.insertCell(0).innerHTML = credits;
         newRow.insertCell(1).innerHTML = songname;
-        newRow.insertCell(2).innerHTML = '00:00';
+        newRow.insertCell(2).innerHTML = length;
 }
 
 function loadQueue(queue) {
