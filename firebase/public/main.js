@@ -17,6 +17,8 @@
     var songqueue;
     var users;
     var widget;
+    var queueRef;
+    var songPaths = []; //song paths on firebase 
 
 $(document).ready(function() {
     //init variables
@@ -34,6 +36,9 @@ ref.orderByChild("height").on("child_added", function(snapshot) {
 //load users and create listener for changes
 var usersRef = new Firebase('https://collabplayer.firebaseio.com/users');
 
+//listener for song queue
+queueRef = new Firebase('https://collabplayer.firebaseio.com/songQueue');
+
 usersRef.on('value', function(snapshot) {
     snapshot.forEach(function(childSnapshot) {
         var key = childSnapshot.key();
@@ -50,16 +55,29 @@ usersRef.on('value', function(snapshot) {
 //onclick listener
 submitbutton.onclick = function() {
     if(songinput.value !== '') {
-    if(player.src === '') {
-        //TODO: add song to queue in database
-        loadPlayer(songinput.value);
-        songinput.value = '';
-    }
-    else {
-        queueSong(0,songinput.value,'00:00');
-        //TODO: add song to queue in database
-        songinput.value = '';
-    }
+        if(player.src === '') {
+            //TODO: add song to queue in database
+            loadPlayer(songinput.value);
+            var path = queueRef.push({'song_url': songinput.value});
+            path = path.toString();
+            console.log(path);
+            songPaths.push(path);
+            songinput.value = '';
+
+
+        }
+        else {
+            queueSong(0,songinput.value,'00:00');
+            //TODO: add song to queue in database
+            var path = queueRef.push({'song_url': songinput.value});
+            path = path.toString();
+            console.log(path);
+            songPaths.push(path);
+            songinput.value = '';
+        }
+
+
+
     }
     loadUsers('jim');
 };      
@@ -102,8 +120,26 @@ function dequeSong() {
 
 //plays next song in queue
 function nextSong() {
-    loadPlayer(dequeSong());
+    var rowCount = $('#songqueue tr').length;
+
+    //checks if queue is non-empty
+    if(rowCount > 1) 
+        loadPlayer(dequeSong());
+    
+    var path = songPaths.splice(0, 1);
+    var pathRef = new Firebase(path[0]);
+        
+    var onComplete = function(error) {
+        if(error) 
+            console.log('Synchronization failed');
+        else
+            console.log('Synchronization succeeded');
+    }
+
+    pathRef.remove(onComplete);
     console.log("nextsong");
+    
 }
+
 
 
