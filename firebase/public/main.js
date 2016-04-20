@@ -32,7 +32,19 @@ ref.orderByChild("height").on("child_added", function(snapshot) {
 });
 
 //load users and create listener for changes
+var usersRef = new Firebase('https://collabplayer.firebaseio.com/users');
 
+usersRef.on('value', function(snapshot) {
+    snapshot.forEach(function(childSnapshot) {
+        var key = childSnapshot.key();
+        var childData = childSnapshot.val();
+        newRow = users.insertRow(-1);
+        newRow.insertCell(0).innerHTML = childData.name;
+        newRow.insertCell(1).innerHTML = childData.credits;
+    //loadUsers(name);
+    });
+
+});
 //load queue and create listener for changes
 
 //onclick listener
@@ -49,6 +61,7 @@ submitbutton.onclick = function() {
         songinput.value = '';
     }
     }
+    loadUsers('jim');
 };      
 });
 
@@ -93,9 +106,4 @@ function nextSong() {
     console.log("nextsong");
 }
 
-function loadUsers(username, credits) {
-    newRow = users.insertRow(-1);
-    newRow.insertCell(0).innerHTML = 'Jimmy';
-    newRow.insertCell(1).innerHTML = 0;
-}
 
