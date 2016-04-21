@@ -28,11 +28,6 @@ $(document).ready(function() {
     songqueue = $('#songqueue')[0];
     users = $('#users')[0];
 
-var ref = new Firebase("https://dinosaur-facts.firebaseio.com/dinosaurs");
-ref.orderByChild("height").on("child_added", function(snapshot) {
-  console.log(snapshot.key() + " was " + snapshot.val().height + " meters tall");
-});
-
 //load users and create listener for changes
 var usersRef = new Firebase('https://collabplayer.firebaseio.com/users');
 
