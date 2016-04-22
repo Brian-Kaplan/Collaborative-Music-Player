@@ -37,7 +37,7 @@ ref.orderByChild("height").on("child_added", function(snapshot) {
 var usersRef = new Firebase('https://collabplayer.firebaseio.com/users');
 
 //listener for song queue
-queueRef = new Firebase('https://collabplayer.firebaseio.com/songQueue');
+queueRef = new Firebase('https://collabplayer.firebaseio.com/queue');
 
 usersRef.on('value', function(snapshot) {
     snapshot.forEach(function(childSnapshot) {
