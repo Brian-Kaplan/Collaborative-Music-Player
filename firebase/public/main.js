@@ -37,7 +37,7 @@ ref.orderByChild("height").on("child_added", function(snapshot) {
 var usersRef = new Firebase('https://collabplayer.firebaseio.com/users');
 
 //listener for song queue
-queueRef = new Firebase('https://collabplayer.firebaseio.com/songQueue');
+queueRef = new Firebase('https://collabplayer.firebaseio.com/queue');
 
 usersRef.on('value', function(snapshot) {
     snapshot.forEach(function(childSnapshot) {
@@ -58,9 +58,14 @@ submitbutton.onclick = function() {
         if(player.src === '') {
             //TODO: add song to queue in database
             loadPlayer(songinput.value);
-            var path = queueRef.push({'song_url': songinput.value});
+            
+            var key = encodeURL(songinput.value);
+            console.log(key);
+            
+            var path = queueRef.push({'song_url': key});
             path = path.toString();
             console.log(path);
+            
             songPaths.push(path);
             songinput.value = '';
 
@@ -69,9 +74,14 @@ submitbutton.onclick = function() {
         else {
             queueSong(0,songinput.value,'00:00');
             //TODO: add song to queue in database
-            var path = queueRef.push({'song_url': songinput.value});
+            var path = queueRef.push({'song_url': key});
+     		
+     		var key = encodeURL(songinput.value);
+            console.log(key);
+            
             path = path.toString();
             console.log(path);
+            
             songPaths.push(path);
             songinput.value = '';
         }
@@ -141,5 +151,11 @@ function nextSong() {
     
 }
 
+//Encode and decode Firebase keys for safe URLs
+function encodeURL(url) {
+	var temp = url.replace(/\./g, '%2E');	//escape '.''
+	var temp2 = temp.replace(/\//g, '%2E'); //escape '/'
+	return temp2;
+}
 
 
