@@ -32,9 +32,10 @@ $(document).ready(function() {
 var usersRef = new Firebase('https://collabplayer.firebaseio.com/users');
 
 //listener for song queue
-queueRef = new Firebase('https://collabplayer.firebaseio.com/songQueue');
+var queueRef = new Firebase('https://collabplayer.firebaseio.com/queue');
 
 usersRef.on('value', function(snapshot) {
+    clearTable(users);
     snapshot.forEach(function(childSnapshot) {
         var key = childSnapshot.key();
         var childData = childSnapshot.val();
@@ -43,7 +44,15 @@ usersRef.on('value', function(snapshot) {
         newRow.insertCell(1).innerHTML = childData.credits;
     //loadUsers(name);
     });
+});
 
+queueRef.on('value', function(snapshot) {
+    snapshot.forEach(function(childSnapshot) {
+        var key = childSnapshot.key();
+        var childData = childSnapshot.val();
+        queueSong(childData.credits,key,childData.length);
+    //loadUsers(name);
+    });
 });
 //load queue and create listener for changes
 
@@ -53,9 +62,14 @@ submitbutton.onclick = function() {
         if(player.src === '') {
             //TODO: add song to queue in database
             loadPlayer(songinput.value);
-            var path = queueRef.push({'song_url': songinput.value});
+            
+            var key = encodeURL(songinput.value);
+            console.log(key);
+            
+            var path = queueRef.push({'song_url': key});
             path = path.toString();
             console.log(path);
+            
             songPaths.push(path);
             songinput.value = '';
 
@@ -64,9 +78,14 @@ submitbutton.onclick = function() {
         else {
             queueSong(0,songinput.value,'00:00');
             //TODO: add song to queue in database
-            var path = queueRef.push({'song_url': songinput.value});
+            var path = queueRef.push({'song_url': key});
+     		
+     		var key = encodeURL(songinput.value);
+            console.log(key);
+            
             path = path.toString();
             console.log(path);
+            
             songPaths.push(path);
             songinput.value = '';
         }
@@ -136,5 +155,16 @@ function nextSong() {
     
 }
 
+//Encode and decode Firebase keys for safe URLs
+function encodeURL(url) {
+	var temp = url.replace(/\./g, '%2E');	//escape '.''
+	var temp2 = temp.replace(/\//g, '%2E'); //escape '/'
+	return temp2;
+}
 
+function clearTable(table) {
+    while(typeof(table.rows[1]) !== 'undefined') {
+        table.deleteRow(1);
+    }
+}
 
