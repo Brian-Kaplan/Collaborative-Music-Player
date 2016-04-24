@@ -8,7 +8,9 @@
  * Updating the queue when a song finishes
  * Adding a song to the queue
  * 
+ * window.onbeforeunload = function() {};
  */
+
 
 //global variables
     var submitbutton;
@@ -31,9 +33,6 @@ $(document).ready(function() {
 //load users and create listener for changes
 var usersRef = new Firebase('https://collabplayer.firebaseio.com/users');
 
-//listener for song queue
-var queueRef = new Firebase('https://collabplayer.firebaseio.com/queue');
-
 usersRef.on('value', function(snapshot) {
     clearTable(users);
     snapshot.forEach(function(childSnapshot) {
@@ -46,57 +45,49 @@ usersRef.on('value', function(snapshot) {
     });
 });
 
+//listener for song queue
+var queueRef = new Firebase('https://collabplayer.firebaseio.com/queue');
+
 queueRef.on('value', function(snapshot) {
+    clearTable(songqueue);
     snapshot.forEach(function(childSnapshot) {
         var key = childSnapshot.key();
         var childData = childSnapshot.val();
-        queueSong(childData.credits,key,childData.length);
-    //loadUsers(name);
+        
+        //prevents undefined song urls from being decoded
+        if(childData.song_url) {
+            queueSong(childData.credits,decodeURL(childData.song_url),childData.length);
+        }
     });
 });
-//load queue and create listener for changes
+
+//now playing listener
+
+var nowPlayingRef = new Firebase('https://collabplayer.firebaseio.com/nowplaying');
+
+nowPlayingRef.on('value', function(snapshot) {
+    snapshot.forEach(function(childSnapshot) {
+        var key = childSnapshot.key();
+        var childData = childSnapshot.val();
+        
+        //prevents undefined song urls from being decoded
+        if(childData.song_url) {
+            queueSong(childData.credits,decodeURL(childData.song_url),childData.length);
+        }
+    });
+});
 
 //onclick listener
 submitbutton.onclick = function() {
     if(songinput.value !== '') {
-        if(player.src === '') {
-            //TODO: add song to queue in database
-            loadPlayer(songinput.value);
-            
-            var key = encodeURL(songinput.value);
-            console.log(key);
-            
-            var path = queueRef.push({'song_url': key});
-            path = path.toString();
-            console.log(path);
-            
-            songPaths.push(path);
-            songinput.value = '';
-
-
-        }
-        else {
-            queueSong(0,songinput.value,'00:00');
-            //TODO: add song to queue in database
-            var path = queueRef.push({'song_url': key});
-     		
-     		var key = encodeURL(songinput.value);
-            console.log(key);
-            
-            path = path.toString();
-            console.log(path);
-            
-            songPaths.push(path);
-            songinput.value = '';
-        }
-
-
-
+        var encodedURL = encodeURL(songinput.value);       
+        var path = queueRef.push({'song_url': encodedURL, 'credits': 1, 'length': '00:00'});
+        songinput.value = '';
     }
-    loadUsers('jim');
 };      
 });
 
+//load player pull the now playing song from firebase
 function loadPlayer(songurl) {
     if(player.src === '') {
         var embedurl = "https://w.soundcloud.com/player/?url="+ songurl +"&amp;auto_play=false&amp;hide_related=false&amp;show_comments=true&amp;show_user=true&amp;show_reposts=false&amp;visual=false";
@@ -134,11 +125,9 @@ function dequeSong() {
 
 //plays next song in queue
 function nextSong() {
+    //if host, update now playing
     var rowCount = $('#songqueue tr').length;
 
-    //checks if queue is non-empty
-    if(rowCount > 1) 
-        loadPlayer(dequeSong());
     
     var path = songPaths.splice(0, 1);
     var pathRef = new Firebase(path[0]);
@@ -157,8 +146,14 @@ function nextSong() {
 
 //Encode and decode Firebase keys for safe URLs
 function encodeURL(url) {
-	var temp = url.replace(/\./g, '%2E');	//escape '.''
-	var temp2 = temp.replace(/\//g, '%2E'); //escape '/'
+	var temp = url.replace(/\./g, ',');	//escape '.''
+	var temp2 = temp.replace(/\//g, '@'); //escape '/'
+	return temp2;
+}
+
+function decodeURL(url) {
+	var temp = url.replace(/,/g, '.');	//escape '.''
+	var temp2 = temp.replace(/@/g, '\/'); //escape '/'
 	return temp2;
 }
 
@@ -167,4 +162,3 @@ function clearTable(table) {
         table.deleteRow(1);
     }
 }
-
