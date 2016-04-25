@@ -23,9 +23,9 @@ When you are making changes please checkout your own branch to push to. Open mer
 #Testing
 --------
 The system tests are implemented using Selenium Webdriver for Python
-PyCharm Community Edition 4.5.4 (Python IDE)
-Python Version 2.7.10
-Selenium Web Driver Version 2.48.0
+- PyCharm Community Edition 4.5.4 (Python IDE)
+- Python Version 2.7.10
+- Selenium Web Driver Version 2.48.0
 
   - Set Up Instructions
     - Install Python 2.7.10 [(https://www.python.org/downloads/release/python-2710/)]
