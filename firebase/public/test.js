@@ -7,33 +7,34 @@ function runTests() {
    if (clearTableTest()) {
    		console.log("clearTableTest Passed");
    }
-   if (testDequeSong()) {
-   		console.log("testDequeSong: pass")
+   else {
+   		console.log("clearTableTest Failed");
    }
+   if (queueSongCreditTest()) {
+   		console.log("queueSongCreditTest Passed");
+   }
+   else {
+   		console.log("queueSongCreditTest Failed")
+   }
+   if (queueSongNameTest()) {
+   		console.log("queueSongNameTest Passed");
+   }
+   else {
+   		console.log("queueSongNameTest Failed")
+   }
+   if (queueSongLengthTest()) {
+   		console.log("queueSongLengthTest Passed");
+   }
+   else {
+   		console.log("queueSongLengthTest Failed")
+   }
+
    testIsValidSongTrue();
    testIsValidSongFalse();
    testEncodeURL();
    testEncodeURL2();
    testDecodeURL();
    testDecodeURL2();
-}
-
-function clearTableTest() {
-	songTable = document.getElementById("songqueue");
-	console.log("songTable length:" + songTable.rows.length);
-	//songTable = $('#songqueue')[0];
-	newRow = songTable.insertRow(-1);
-	newRow.insertCell(0).innerHTML = "test";
-
-	console.log("songTable length after add:" + songTable.rows.length);
-	clearTable(songTable);
-	console.log("songTable length after clearTable() called:" + songTable.rows.length);
-
-	if (songTable.rows.length == 1) {
-		console.log("songTable is empty");
-		return true;
-	}
-	return false;
 }
 
 function testIsValidSongTrue() {
@@ -133,4 +134,55 @@ function testDecodeURL2() {
 	});
 
 	console.log("Decode url test #2 passed");
+}
+
+function clearTableTest() {
+	songTable = document.getElementById("songqueue");
+	usersTable = document.getElementById("users");
+	//console.log("songTable length:" + songTable.rows.length);
+	//songTable = $('#songqueue')[0];
+	newRow = songTable.insertRow(-1);
+	newRow2 = usersTable.insertRow(-1);
+	newRow.insertCell(0).innerHTML = "test";
+	newRow2.insertCell(0).innerHTML = "test";
+
+	//console.log("songTable length after add:" + songTable.rows.length);
+	clearTable(songTable);
+	clearTable(usersTable);
+	//console.log("songTable length after clearTable() called:" + songTable.rows.length);
+
+	if (songTable.rows.length == 1 && usersTable.rows.length == 1) {
+		return true;
+	}
+	return false;
+}
+
+function queueSongCreditTest() {
+	songTable = document.getElementById("songqueue");
+	queueSong('1','Lucy in the Sky with Diamonds','5:00');
+
+	if (songTable.rows[1].cells[0].innerHTML.localeCompare("1") == 0) {
+		return true;
+	}
+	return false;
+}
+
+function queueSongNameTest() {
+	songTable = document.getElementById("songqueue");
+	queueSong('1','Lucy in the Sky with Diamonds','5:00');
+
+	if (songTable.rows[1].cells[1].innerHTML.localeCompare("Lucy in the Sky with Diamonds") == 0) {
+		return true;
+	}
+	return false;
+}
+
+function queueSongLengthTest() {
+	songTable = document.getElementById("songqueue");
+	queueSong('1','Lucy in the Sky with Diamonds','5:00');
+
+	if (songTable.rows[1].cells[2].innerHTML.localeCompare("5:00") == 0) {
+		return true;
+	}
+	return false;
 }
