@@ -48,14 +48,14 @@ $(document).ready(function() {
 
 //if testing, use the test database
 if(testing) {
-usersRef = new Firebase('https://collabplayer.firebaseio.com/testusers');
-queueRef = new Firebase('https://collabplayer.firebaseio.com/testqueue');
-nowPlayingRef = new Firebase('https://collabplayer.firebaseio.com/testnowplaying');
+    usersRef = new Firebase('https://collabplayer.firebaseio.com/testusers17');
+    queueRef = new Firebase('https://collabplayer.firebaseio.com/testqueue17');
+    nowPlayingRef = new Firebase('https://collabplayer.firebaseio.com/testnowplaying17');
 }
 else {
-usersRef = new Firebase('https://collabplayer.firebaseio.com/users');
-queueRef = new Firebase('https://collabplayer.firebaseio.com/queue');
-nowPlayingRef = new Firebase('https://collabplayer.firebaseio.com/nowplaying');
+    usersRef = new Firebase('https://collabplayer.firebaseio.com/users');
+    queueRef = new Firebase('https://collabplayer.firebaseio.com/queue');
+    nowPlayingRef = new Firebase('https://collabplayer.firebaseio.com/nowplaying');
 }
 
 //load users and create listener for changes
