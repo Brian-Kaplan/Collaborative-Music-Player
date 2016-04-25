@@ -11,6 +11,8 @@
  * window.onbeforeunload = function() {};
  */
 
+    //Testing: true = test environment
+    var testing = false;
 
 //global variables
     var submitbutton;
@@ -21,7 +23,14 @@
     var widget;
     var queueRef;
     var nowPlayingRef;
+    var usersRef;
     var songPaths = []; //song paths on firebase 
+
+    var uid = readCookie('USER_UID');
+
+    if (uid == null && !testing) {
+        window.location.href = 'index.html'
+    };
 
 $(document).ready(function() {
     //init variables
@@ -30,12 +39,11 @@ $(document).ready(function() {
     player = document.getElementById('player');
     songqueue = $('#songqueue')[0];
     users = $('#users')[0];
-    
-    
-
+    uidLabel = document.getElementById('uidLabel');
+    uidLabel.innerHTML = uid;
 
 //load users and create listener for changes
-var usersRef = new Firebase('https://collabplayer.firebaseio.com/users');
+usersRef = new Firebase('https://collabplayer.firebaseio.com/users');
 
 usersRef.on('value', function(snapshot) {
     clearTable(users);
@@ -49,20 +57,15 @@ usersRef.on('value', function(snapshot) {
     });
 });
 
-/*
+
 //set user to logged in on connection
-var myUserRef = usersRef.child('/'+myUserKey);
+var myUserRef = usersRef.child('/'+uid);
 var loggedinRef = myUserRef.child('/logged_in');
 loggedinRef.set(1);
 loggedinRef.onDisconnect().set(0);
 
-    //set host to 0 on disconnect
-var hostRef = myUserRef.child('/host');
-loggedinRef.onDisconnect().set(0);
-*/
-
 //listener for song queue
-var queueRef = new Firebase('https://collabplayer.firebaseio.com/queue');
+queueRef = new Firebase('https://collabplayer.firebaseio.com/queue');
 
 queueRef.on('value', function(snapshot) {
     clearTable(songqueue);
@@ -81,15 +84,8 @@ queueRef.on('value', function(snapshot) {
 
 nowPlayingRef = new Firebase('https://collabplayer.firebaseio.com/nowplaying');
 
-nowPlayingRef.on('child_added', function(snapshot) {
-    snapshot.forEach(function(childSnapshot) {
-        var key = childSnapshot.key();
-        var childData = childSnapshot.val();
-        
-        if(childData.song_url) {
-           loadPlayer(childData.song_url);       
-        }
-    });
+nowPlayingRef.on('value', function(snapshot) {
+    loadPlayer(snapshot.val());
 });
 
 //onclick listener
@@ -139,15 +135,18 @@ function dequeSong() {
 //plays next song in queue
 function nextSong() {
     //if host, update now playing
-    var rowCount = $('#songqueue tr').length;
-        
-    var hostRef = new Firebase("https://collabplayer.firebaseio.com/users/host");
-    hostRef.orderByValue().limitToFirst(1).once("value", function(snapshot) {
-    snapshot.forEach(function(data) {
+    var nextSongURL;
     
-  });
-});
-    
+    if(amIHost()) {
+        queueRef.orderByChild('credits').limitToLast(1).once('value', function(dataSnapshot) {
+            dataSnapshot.forEach(function(childSnapshot) {
+                var childData = childSnapshot.val();               
+                nextSongURL = decodeURL(childData.song_url);
+                childSnapshot.ref().remove();
+            });
+        });
+        nowPlayingRef.set(nextSongURL);
+    }
 }
 
 //Encode and decode Firebase keys for safe URLs
@@ -167,4 +166,40 @@ function clearTable(table) {
     while(typeof(table.rows[1]) !== 'undefined') {
         table.deleteRow(1);
     }
+}
+
+function readCookie(name) {
+    var nameEQ = name + "=";
+    var ca = document.cookie.split(';');
+    for(var i=0;i < ca.length;i++) {
+      var c = ca[i];
+      while (c.charAt(0)==' ') c = c.substring(1,c.length);
+        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+    }
+      return null;
+}
+
+function createCookie(name,value,days) {
+  if (days) {
+    var date = new Date();
+    date.setTime(date.getTime()+(days*24*60*60*1000));
+    var expires = "; expires="+date.toGMTString();
+  }
+  else var expires = "";
+  document.cookie = name+"="+value+expires+"; path=/";
+}
+
+//checks to see if current user is host
+//host is first logged in user returned
+function amIHost() {
+    var check = false;
+    usersRef.orderByChild("logged_in").limitToLast(1).once("value", function(snapshot) {
+        snapshot.forEach(function(childSnapshot) {
+           var key = childSnapshot.key();
+           if(key.localeCompare(uid) == 0) {
+                check = true;
+           }        
+        });
+    });
+    return check;
 }
