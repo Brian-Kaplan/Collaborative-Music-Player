@@ -153,6 +153,7 @@
             routeTo(route);
 
         }, function (err) {
+            showPopup(err)
             console.log(err);
             // pop up error
             showAlert({
@@ -162,6 +163,11 @@
             });
 
         });
+    }
+
+
+    function showPopup(description) {
+      window.alert(description);
     }
 
     // options for showing the alert box
