@@ -8,9 +8,11 @@
  * Updating the queue when a song finishes
  * Adding a song to the queue
  * 
- * window.onbeforeunload = function() {};
+ * https://soundcloud.com/friendlistworld/avira-beep-sound
  */
 
+    //Testing: true = test environment
+    var testing = true;
 
 //global variables
     var submitbutton;
@@ -20,11 +22,17 @@
     var users;
     var widget;
     var queueRef;
+    var nowPlayingRef;
+    var usersRef;
     var songPaths = []; //song paths on firebase 
 
     var uid = readCookie('USER_UID');
 
-    if (uid == null) {
+    if(testing) {
+        uid = "c4e95df2-8685-4bbe-94a7-de3e46612499";
+    }
+
+    if (uid == null && !testing) {
         window.location.href = 'index.html'
     };
 
@@ -38,9 +46,19 @@ $(document).ready(function() {
     uidLabel = document.getElementById('uidLabel');
     uidLabel.innerHTML = uid;
 
-//load users and create listener for changes
-var usersRef = new Firebase('https://collabplayer.firebaseio.com/users');
+//if testing, use the test database
+if(testing) {
+usersRef = new Firebase('https://collabplayer.firebaseio.com/testusers');
+queueRef = new Firebase('https://collabplayer.firebaseio.com/testqueue');
+nowPlayingRef = new Firebase('https://collabplayer.firebaseio.com/testnowplaying');
+}
+else {
+usersRef = new Firebase('https://collabplayer.firebaseio.com/users');
+queueRef = new Firebase('https://collabplayer.firebaseio.com/queue');
+nowPlayingRef = new Firebase('https://collabplayer.firebaseio.com/nowplaying');
+}
 
+//load users and create listener for changes
 usersRef.on('value', function(snapshot) {
     clearTable(users);
     snapshot.forEach(function(childSnapshot) {
@@ -51,11 +69,20 @@ usersRef.on('value', function(snapshot) {
         newRow.insertCell(1).innerHTML = childData.credits;
     //loadUsers(name);
     });
+
+    if (testing) {
+        runTests();
+    }
 });
 
-//listener for song queue
-var queueRef = new Firebase('https://collabplayer.firebaseio.com/queue');
 
+//set user to logged in on connection
+var myUserRef = usersRef.child('/'+uid);
+var loggedinRef = myUserRef.child('/logged_in');
+loggedinRef.set(1);
+loggedinRef.onDisconnect().set(0);
+
+//listener for song queue
 queueRef.on('value', function(snapshot) {
     clearTable(songqueue);
     snapshot.forEach(function(childSnapshot) {
@@ -71,18 +98,8 @@ queueRef.on('value', function(snapshot) {
 
 //now playing listener
 
-var nowPlayingRef = new Firebase('https://collabplayer.firebaseio.com/nowplaying');
-
 nowPlayingRef.on('value', function(snapshot) {
-    snapshot.forEach(function(childSnapshot) {
-        var key = childSnapshot.key();
-        var childData = childSnapshot.val();
-        
-        //prevents undefined song urls from being decoded
-        if(childData.song_url) {
-            queueSong(childData.credits,decodeURL(childData.song_url),childData.length);
-        }
-    });
+    loadPlayer(snapshot.val());
 });
 
 //onclick listener
@@ -106,8 +123,6 @@ function loadPlayer(songurl) {
     else {
         widget.load(songurl,{auto_play:false,hide_related:false,show_comments:true,show_user:true,show_reposts:false,visual:false});
     }
-    
-
 }
 
 //songname currently is song url from soundcloud
@@ -134,22 +149,29 @@ function dequeSong() {
 //plays next song in queue
 function nextSong() {
     //if host, update now playing
-    var rowCount = $('#songqueue tr').length;
-
+    var nextSongURL;
     
-    var path = songPaths.splice(0, 1);
-    var pathRef = new Firebase(path[0]);
-        
-    var onComplete = function(error) {
-        if(error) 
-            console.log('Synchronization failed');
-        else
-            console.log('Synchronization succeeded');
+    if(amIHost()) {
+        queueRef.orderByChild('credits').limitToLast(1).once('value', function(dataSnapshot) {
+            dataSnapshot.forEach(function(childSnapshot) {
+                var childData = childSnapshot.val();               
+                nextSongURL = decodeURL(childData.song_url);
+                childSnapshot.ref().remove();
+            });
+        });
+        //check if next song exists
+        if(nextSongURL) {
+            if(isValidURL(nextSongURL)){ //checks to see if next song is valid
+                nowPlayingRef.set(nextSongURL);
+            }
+            else {
+                nextSong();
+            }
+        }
+        else { //no valid songs left
+            nowPlayingRef.set('');
+        }
     }
-
-    pathRef.remove(onComplete);
-    console.log("nextsong");
-    
 }
 
 //Encode and decode Firebase keys for safe URLs
@@ -190,4 +212,23 @@ function createCookie(name,value,days) {
   }
   else var expires = "";
   document.cookie = name+"="+value+expires+"; path=/";
+}
+
+//checks to see if current user is host
+//host is first logged in user returned
+function amIHost() {
+    var check = false;
+    usersRef.orderByChild("logged_in").limitToLast(1).once("value", function(snapshot) {
+        snapshot.forEach(function(childSnapshot) {
+           var key = childSnapshot.key();
+           if(key.localeCompare(uid) == 0) {
+                check = true;
+           }        
+        });
+    });
+    return check;
+}
+
+function isValidSong(songurl) {
+    return songurl.indexOf('soundcloud.com') != -1;
 }
