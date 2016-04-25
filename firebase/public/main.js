@@ -8,7 +8,7 @@
  * Updating the queue when a song finishes
  * Adding a song to the queue
  * 
- * window.onbeforeunload = function() {};
+ * https://soundcloud.com/friendlistworld/avira-beep-sound
  */
 
     //Testing: true = test environment
@@ -46,9 +46,19 @@ $(document).ready(function() {
     uidLabel = document.getElementById('uidLabel');
     uidLabel.innerHTML = uid;
 
-//load users and create listener for changes
+//if testing, use the test database
+if(testing) {
+usersRef = new Firebase('https://collabplayer.firebaseio.com/testusers');
+queueRef = new Firebase('https://collabplayer.firebaseio.com/testqueue');
+nowPlayingRef = new Firebase('https://collabplayer.firebaseio.com/testnowplaying');
+}
+else {
 usersRef = new Firebase('https://collabplayer.firebaseio.com/users');
+queueRef = new Firebase('https://collabplayer.firebaseio.com/queue');
+nowPlayingRef = new Firebase('https://collabplayer.firebaseio.com/nowplaying');
+}
 
+//load users and create listener for changes
 usersRef.on('value', function(snapshot) {
     clearTable(users);
     snapshot.forEach(function(childSnapshot) {
@@ -69,8 +79,6 @@ loggedinRef.set(1);
 loggedinRef.onDisconnect().set(0);
 
 //listener for song queue
-queueRef = new Firebase('https://collabplayer.firebaseio.com/queue');
-
 queueRef.on('value', function(snapshot) {
     clearTable(songqueue);
     snapshot.forEach(function(childSnapshot) {
@@ -85,8 +93,6 @@ queueRef.on('value', function(snapshot) {
 });
 
 //now playing listener
-
-nowPlayingRef = new Firebase('https://collabplayer.firebaseio.com/nowplaying');
 
 nowPlayingRef.on('value', function(snapshot) {
     loadPlayer(snapshot.val());
@@ -149,7 +155,18 @@ function nextSong() {
                 childSnapshot.ref().remove();
             });
         });
-        nowPlayingRef.set(nextSongURL);
+        //check if next song exists
+        if(nextSongURL) {
+            if(isValidURL(nextSongURL)){ //checks to see if next song is valid
+                nowPlayingRef.set(nextSongURL);
+            }
+            else {
+                nextSong();
+            }
+        }
+        else { //no valid songs left
+            nowPlayingRef.set('');
+        }
     }
 }
 
@@ -206,4 +223,8 @@ function amIHost() {
         });
     });
     return check;
+}
+
+function isValidSong(songurl) {
+    return songurl.indexOf('soundcloud.com') != -1;
 }
