@@ -29,6 +29,9 @@ $(document).ready(function() {
     player = document.getElementById('player');
     songqueue = $('#songqueue')[0];
     users = $('#users')[0];
+    uidLabel = document.getElementById('uidLabel');
+    var uid = readCookie('USER_UID');
+    uidLabel.innerHTML = uid;
 
 //load users and create listener for changes
 var usersRef = new Firebase('https://collabplayer.firebaseio.com/users');
@@ -161,4 +164,25 @@ function clearTable(table) {
     while(typeof(table.rows[1]) !== 'undefined') {
         table.deleteRow(1);
     }
+}
+
+function readCookie(name) {
+    var nameEQ = name + "=";
+    var ca = document.cookie.split(';');
+    for(var i=0;i < ca.length;i++) {
+      var c = ca[i];
+      while (c.charAt(0)==' ') c = c.substring(1,c.length);
+        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+    }
+      return null;
+}
+
+function createCookie(name,value,days) {
+  if (days) {
+    var date = new Date();
+    date.setTime(date.getTime()+(days*24*60*60*1000));
+    var expires = "; expires="+date.toGMTString();
+  }
+  else var expires = "";
+  document.cookie = name+"="+value+expires+"; path=/";
 }

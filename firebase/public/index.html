@@ -19,6 +19,37 @@
         <!-- Latest compiled and minified JavaScript -->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
 
+
+        <script type="text/javascript">
+
+        function createCookie(name,value,days) {
+          if (days) {
+            var date = new Date();
+            date.setTime(date.getTime()+(days*24*60*60*1000));
+            var expires = "; expires="+date.toGMTString();
+          }
+          else var expires = "";
+          document.cookie = name+"="+value+expires+"; path=/";
+        }
+
+        function readCookie(name) {
+            var nameEQ = name + "=";
+            var ca = document.cookie.split(';');
+            for(var i=0;i < ca.length;i++) {
+              var c = ca[i];
+              while (c.charAt(0)==' ') c = c.substring(1,c.length);
+                if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+            }
+              return null;
+        }
+
+        function getCookie(name) {
+          var x = readCookie(name);
+          return x;
+        }
+        
+        </script>
+
   <header class="navbar navbar-static-top navbar-inverse" id="top" role="banner">
       <div class="container">
           <div class="navbar-header">
@@ -117,4 +148,6 @@
       </div>
       <!-- / ALERT BOX -->
   </div>
+  <button onclick="createCookie('ppkcookie','testcookie',7)">create</button>
+  <button onclick ="getCookie('ppkcookie')">load</button>
 </html>
