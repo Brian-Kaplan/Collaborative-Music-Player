@@ -12,7 +12,7 @@
  */
 
     //Testing: true = test environment
-    var testing = false;
+    var testing = true;
 
 //global variables
     var submitbutton;
@@ -59,6 +59,10 @@ usersRef.on('value', function(snapshot) {
         newRow.insertCell(1).innerHTML = childData.credits;
     //loadUsers(name);
     });
+
+    if (testing) {
+        runTests();
+    }
 });
 
 
