@@ -20,6 +20,7 @@
     var users;
     var widget;
     var queueRef;
+    var nowPlayingRef;
     var songPaths = []; //song paths on firebase 
 
 $(document).ready(function() {
@@ -29,6 +30,9 @@ $(document).ready(function() {
     player = document.getElementById('player');
     songqueue = $('#songqueue')[0];
     users = $('#users')[0];
+    
+    
+
 
 //load users and create listener for changes
 var usersRef = new Firebase('https://collabplayer.firebaseio.com/users');
@@ -44,6 +48,18 @@ usersRef.on('value', function(snapshot) {
     //loadUsers(name);
     });
 });
+
+/*
+//set user to logged in on connection
+var myUserRef = usersRef.child('/'+myUserKey);
+var loggedinRef = myUserRef.child('/logged_in');
+loggedinRef.set(1);
+loggedinRef.onDisconnect().set(0);
+
+    //set host to 0 on disconnect
+var hostRef = myUserRef.child('/host');
+loggedinRef.onDisconnect().set(0);
+*/
 
 //listener for song queue
 var queueRef = new Firebase('https://collabplayer.firebaseio.com/queue');
@@ -63,16 +79,15 @@ queueRef.on('value', function(snapshot) {
 
 //now playing listener
 
-var nowPlayingRef = new Firebase('https://collabplayer.firebaseio.com/nowplaying');
+nowPlayingRef = new Firebase('https://collabplayer.firebaseio.com/nowplaying');
 
-nowPlayingRef.on('value', function(snapshot) {
+nowPlayingRef.on('child_added', function(snapshot) {
     snapshot.forEach(function(childSnapshot) {
         var key = childSnapshot.key();
         var childData = childSnapshot.val();
         
-        //prevents undefined song urls from being decoded
         if(childData.song_url) {
-            queueSong(childData.credits,decodeURL(childData.song_url),childData.length);
+           loadPlayer(childData.song_url);       
         }
     });
 });
@@ -98,8 +113,6 @@ function loadPlayer(songurl) {
     else {
         widget.load(songurl,{auto_play:false,hide_related:false,show_comments:true,show_user:true,show_reposts:false,visual:false});
     }
-    
-
 }
 
 //songname currently is song url from soundcloud
@@ -127,20 +140,13 @@ function dequeSong() {
 function nextSong() {
     //if host, update now playing
     var rowCount = $('#songqueue tr').length;
-
-    
-    var path = songPaths.splice(0, 1);
-    var pathRef = new Firebase(path[0]);
         
-    var onComplete = function(error) {
-        if(error) 
-            console.log('Synchronization failed');
-        else
-            console.log('Synchronization succeeded');
-    }
-
-    pathRef.remove(onComplete);
-    console.log("nextsong");
+    var hostRef = new Firebase("https://collabplayer.firebaseio.com/users/host");
+    hostRef.orderByValue().limitToFirst(1).once("value", function(snapshot) {
+    snapshot.forEach(function(data) {
+    
+  });
+});
     
 }
 
