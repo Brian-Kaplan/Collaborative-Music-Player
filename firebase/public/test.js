@@ -10,6 +10,9 @@ function runTests() {
    else {
    		console.log("clearTableTest Failed");
    }
+   if (testDequeSong()) {
+   		console.log("testDequeSong: pass")
+   }
    if (queueSongCreditTest()) {
    		console.log("queueSongCreditTest Passed");
    }
@@ -28,7 +31,7 @@ function runTests() {
    else {
    		console.log("queueSongLengthTest Failed")
    }
-
+   
    testIsValidSongTrue();
    testIsValidSongFalse();
    testEncodeURL();
@@ -182,6 +185,24 @@ function queueSongLengthTest() {
 	queueSong('1','Lucy in the Sky with Diamonds','5:00');
 
 	if (songTable.rows[1].cells[2].innerHTML.localeCompare("5:00") == 0) {
+		return true;
+	}
+	return false;
+}
+
+function testDequeSong() {
+	songTable = document.getElementById("songqueue");
+	console.log("songTable length:" + songTable.rows.length);
+	//newRow = songTable.insertRow(-1);
+	//newRow.insertCell(0).innerHTML = "test";
+
+	console.log("songTable length after add:" + songTable.rows.length);
+	loadPlayer('https://soundcloud.com/adamfostermusic/adam-foster-feat-monty-wells-daylight');
+	queueSong("0",'https://soundcloud.com/adamfostermusic/adam-foster-feat-monty-wells-daylight',"00:00");
+	dequeSong();
+	console.log("songTable length after dequeSong() called:" + songTable.rows.length);
+	if (songTable.rows.length == 1) {
+		console.log("songTable is empty");
 		return true;
 	}
 	return false;

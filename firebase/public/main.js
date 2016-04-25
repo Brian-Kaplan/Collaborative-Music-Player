@@ -12,7 +12,7 @@
  */
 
     //Testing: true = test environment
-    var testing = false;
+    var testing = true;
 
 //global variables
     var submitbutton;
