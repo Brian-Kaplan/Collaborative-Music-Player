@@ -90,7 +90,9 @@ queueRef.on('value', function(snapshot) {
         }
     });
     nowPlayingRef.once('value', function(snapshot) {
-        
+        if(snapshot.val() == '') {
+            nextSong();
+        }
     });
 });
 
@@ -116,21 +118,16 @@ submitbutton.onclick = function() {
 
 //load player pull the now playing song from firebase
 function loadPlayer(songurl) {
-    if(songurl !== '') { 
-        console.log(player.src);
         if(player.src.localeCompare('') == 0) {
-            var embedurl = "https://w.soundcloud.com/player/?url="+ songurl +"&amp;auto_play=false&amp;hide_related=false&amp;show_comments=true&amp;show_user=true&amp;show_reposts=false&amp;visual=false";
-            player.src = embedurl;
+            var myembedurl = "https://w.soundcloud.com/player/?url="+ songurl +"&amp;auto_play=false&amp;hide_related=false&amp;show_comments=true&amp;show_user=true&amp;show_reposts=false&amp;visual=false";
+            player.src = myembedurl;
             widget = SC.Widget(player);
             widget.bind(SC.Widget.Events.FINISH,nextSong);
         }
         else {
             widget.load(songurl,{auto_play:false,hide_related:false,show_comments:true,show_user:true,show_reposts:false,visual:false});
         }
-    }
-    else {
-        player.src = '';
-    }
+    
 }
 
 //songname currently is song url from soundcloud
