@@ -22,6 +22,12 @@
     var queueRef;
     var songPaths = []; //song paths on firebase 
 
+    var uid = readCookie('USER_UID');
+
+    if (uid == null) {
+        window.location.href = 'index.html'
+    };
+
 $(document).ready(function() {
     //init variables
     submitbutton = document.getElementById('submitbutton');
@@ -30,7 +36,6 @@ $(document).ready(function() {
     songqueue = $('#songqueue')[0];
     users = $('#users')[0];
     uidLabel = document.getElementById('uidLabel');
-    var uid = readCookie('USER_UID');
     uidLabel.innerHTML = uid;
 
 //load users and create listener for changes
