@@ -4,11 +4,17 @@
 
 //driver for all tests
 function runTests() {
-   if (clearTableTest()) {
-   		console.log("clearTableTest Passed");
+   if (clearSongQueueTableTest()) {
+   		console.log("clearSongQueueTableTest Passed");
    }
    else {
-   		console.log("clearTableTest Failed");
+   		console.log("clearSongQueueTableTest Failed");
+   }
+   if (clearUsersTableTest()) {
+   		console.log("clearUsersTableTest Passed");
+   }
+   else {
+   		console.log("clearUsersTableTest Failed");
    }
    if (testDequeSong()) {
    		console.log("testDequeSong: pass")
@@ -142,22 +148,34 @@ function testDecodeURL2() {
 	console.log("Decode url test #2 passed");
 }
 
-function clearTableTest() {
+function clearSongQueueTableTest() {
 	songTable = document.getElementById("songqueue");
-	usersTable = document.getElementById("users");
 	//console.log("songTable length:" + songTable.rows.length);
 	//songTable = $('#songqueue')[0];
 	newRow = songTable.insertRow(-1);
-	newRow2 = usersTable.insertRow(-1);
 	newRow.insertCell(0).innerHTML = "test";
-	newRow2.insertCell(0).innerHTML = "test";
 
 	//console.log("songTable length after add:" + songTable.rows.length);
 	clearTable(songTable);
+	//console.log("songTable length after clearTable() called:" + songTable.rows.length);
+
+	if (songTable.rows.length == 1) {
+		return true;
+	}
+	return false;
+}
+
+function clearUsersTableTest() {
+	usersTable = document.getElementById("users");
+	//console.log("songTable length:" + songTable.rows.length);
+	//songTable = $('#songqueue')[0];
+	newRow2 = usersTable.insertRow(-1);
+	newRow2.insertCell(0).innerHTML = "test";
+
 	clearTable(usersTable);
 	//console.log("songTable length after clearTable() called:" + songTable.rows.length);
 
-	if (songTable.rows.length == 1 && usersTable.rows.length == 1) {
+	if (usersTable.rows.length == 1) {
 		return true;
 	}
 	return false;
