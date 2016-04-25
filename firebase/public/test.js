@@ -38,7 +38,9 @@ function runTests() {
    testEncodeURL2();
    testDecodeURL();
    testDecodeURL2();
-   testLoadPlayer()
+   testLoadPlayer();
+   testLoadPlayer2();
+
 }
 
 function testIsValidSongTrue() {
@@ -213,6 +215,15 @@ function testLoadPlayer() {
 	var table = document.getElementById("songqueue");
 	var player = document.getElementById('player');
 	if (table.rows.length > 1 && player.src === '' )
+		console.log("Load player failed");
+	else
+		console.log("Load player passed");
+}
+
+function testLoadPlayer2() {
+	var table = document.getElementById("songqueue");
+	var player = document.getElementById('player');
+	if (table.rows.length <= 1 && player.src !== '' )
 		console.log("Load player failed");
 	else
 		console.log("Load player passed");
