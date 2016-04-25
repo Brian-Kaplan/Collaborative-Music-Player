@@ -12,6 +12,10 @@ function runTests() {
    }
    testIsValidSongTrue();
    testIsValidSongFalse();
+   testEncodeURL();
+   testEncodeURL2();
+   testDecodeURL();
+   testDecodeURL2();
 }
 
 function clearTableTest() {
@@ -64,4 +68,69 @@ function testDequeSong() {
 		return true;
 	}
 	return false;
+}
+
+function testEncodeURL() {
+	queueRef.on('value', function(snapshot) {
+    snapshot.forEach(function(childSnapshot) {
+        var key = childSnapshot.key();
+        var childData = childSnapshot.val();
+        
+        if(childData.song_url.includes('.') || childData.song_url.includes('/')) {
+            console.log("Encode url test #1 failed");
+	        }
+	    });
+	});
+	console.log("Encode url test #1 passed");
+}
+
+function testEncodeURL2() {
+	queueRef.on('value', function(snapshot) {
+    snapshot.forEach(function(childSnapshot) {
+        var key = childSnapshot.key();
+        var childData = childSnapshot.val();
+        
+        if(childData.song_url.includes('/')) {
+            console.log("Encode url test #2 failed");
+	        }
+	    });
+	});
+	console.log("Encode url test #2 passed");
+}
+
+
+function testDecodeURL() {
+	queueRef.on('value', function(snapshot) {
+    snapshot.forEach(function(childSnapshot) {
+        var key = childSnapshot.key();
+        var childData = childSnapshot.val();
+        
+        var url = childData.song_url;
+        var testURL = decodeURL(url);
+
+        if(testURL.includes(',') || testURL.includes('@')) {
+            console.log("Decode url test #1 failed");
+	        }
+	    });
+	});
+
+	console.log("Decode url test #1 passed");
+}
+
+function testDecodeURL2() {
+	queueRef.on('value', function(snapshot) {
+    snapshot.forEach(function(childSnapshot) {
+        var key = childSnapshot.key();
+        var childData = childSnapshot.val();
+        
+        var url = childData.song_url;
+        var testURL = decodeURL(url);
+
+        if(testURL.includes('@')) {
+            console.log("Decode url test #2 failed");
+	        }
+	    });
+	});
+
+	console.log("Decode url test #2 passed");
 }
