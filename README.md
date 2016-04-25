@@ -22,6 +22,14 @@ When you are making changes please checkout your own branch to push to. Open mer
 
 #Testing
 --------
+For the Unit Tests the var testing at the top of the main.js must be set to true.
+You must then redeploy the server $firebase deploy for the changes to take effect.
+
+For testing the System tests the var testing at the top of the main.js must be set to false.
+You must then redeploy the server $firebase deploy for the changes to take effect.
+
+The unit tests are implemented using straight javascript. Look at the log of console to see the output for results
+
 The system tests are implemented using Selenium Webdriver for Python
 - PyCharm Community Edition 4.5.4 (Python IDE)
 - Python Version 2.7.10
