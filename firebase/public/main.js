@@ -28,6 +28,10 @@
 
     var uid = readCookie('USER_UID');
 
+    if(testing) {
+        uid = "c4e95df2-8685-4bbe-94a7-de3e46612499";
+    }
+
     if (uid == null && !testing) {
         window.location.href = 'index.html'
     };
