@@ -12,7 +12,7 @@
  */
 
     //Testing: true = test environment
-    var testing = true;
+    var testing = false;
 
 //global variables
     var submitbutton;
@@ -46,17 +46,17 @@ $(document).ready(function() {
     uidLabel = document.getElementById('uidLabel');
     uidLabel.innerHTML = uid;
 
-//if testing, use the test database
-if(testing) {
-    usersRef = new Firebase('https://collabplayer.firebaseio.com/testusers17');
-    queueRef = new Firebase('https://collabplayer.firebaseio.com/testqueue17');
-    nowPlayingRef = new Firebase('https://collabplayer.firebaseio.com/testnowplaying17');
-}
-else {
+    //if testing, use the test database
+    if(testing) {
+    usersRef = new Firebase('https://collabplayer.firebaseio.com/testusers');
+    queueRef = new Firebase('https://collabplayer.firebaseio.com/testqueue');
+    nowPlayingRef = new Firebase('https://collabplayer.firebaseio.com/testnowplaying');
+    }
+    else {
     usersRef = new Firebase('https://collabplayer.firebaseio.com/users');
     queueRef = new Firebase('https://collabplayer.firebaseio.com/queue');
     nowPlayingRef = new Firebase('https://collabplayer.firebaseio.com/nowplaying');
-}
+    }
 
 //load users and create listener for changes
 usersRef.on('value', function(snapshot) {
@@ -67,12 +67,7 @@ usersRef.on('value', function(snapshot) {
         newRow = users.insertRow(-1);
         newRow.insertCell(0).innerHTML = childData.name;
         newRow.insertCell(1).innerHTML = childData.credits;
-    //loadUsers(name);
     });
-
-    if (testing) {
-        runTests();
-    }
 });
 
 
@@ -94,12 +89,15 @@ queueRef.on('value', function(snapshot) {
             queueSong(childData.credits,decodeURL(childData.song_url),childData.length);
         }
     });
+    nowPlayingRef.once('value', function(snapshot) {
+        
+    });
 });
 
 //now playing listener
 
 nowPlayingRef.on('value', function(snapshot) {
-    loadPlayer(snapshot.val());
+        loadPlayer(snapshot.val());
 });
 
 //onclick listener
@@ -109,19 +107,29 @@ submitbutton.onclick = function() {
         var path = queueRef.push({'song_url': encodedURL, 'credits': 1, 'length': '00:00'});
         songinput.value = '';
     }
-};      
+};
+
+    if (testing) {
+        runTests();
+    }
 });
 
 //load player pull the now playing song from firebase
 function loadPlayer(songurl) {
-    if(player.src === '') {
-        var embedurl = "https://w.soundcloud.com/player/?url="+ songurl +"&amp;auto_play=false&amp;hide_related=false&amp;show_comments=true&amp;show_user=true&amp;show_reposts=false&amp;visual=false";
-        player.src = embedurl;
-        widget = SC.Widget(player);
-        widget.bind(SC.Widget.Events.FINISH,nextSong);
+    if(songurl !== '') { 
+        console.log(player.src);
+        if(player.src.localeCompare('') == 0) {
+            var embedurl = "https://w.soundcloud.com/player/?url="+ songurl +"&amp;auto_play=false&amp;hide_related=false&amp;show_comments=true&amp;show_user=true&amp;show_reposts=false&amp;visual=false";
+            player.src = embedurl;
+            widget = SC.Widget(player);
+            widget.bind(SC.Widget.Events.FINISH,nextSong);
+        }
+        else {
+            widget.load(songurl,{auto_play:false,hide_related:false,show_comments:true,show_user:true,show_reposts:false,visual:false});
+        }
     }
     else {
-        widget.load(songurl,{auto_play:false,hide_related:false,show_comments:true,show_user:true,show_reposts:false,visual:false});
+        player.src = '';
     }
 }
 
@@ -151,7 +159,7 @@ function nextSong() {
     //if host, update now playing
     var nextSongURL;
     
-    if(amIHost()) {
+    if(amIHost(uid)) {
         queueRef.orderByChild('credits').limitToLast(1).once('value', function(dataSnapshot) {
             dataSnapshot.forEach(function(childSnapshot) {
                 var childData = childSnapshot.val();               
@@ -160,8 +168,9 @@ function nextSong() {
             });
         });
         //check if next song exists
+        console.log(nextSongURL);
         if(nextSongURL) {
-            if(isValidURL(nextSongURL)){ //checks to see if next song is valid
+            if(isValidSong(nextSongURL)){ //checks to see if next song is valid
                 nowPlayingRef.set(nextSongURL);
             }
             else {
@@ -216,12 +225,12 @@ function createCookie(name,value,days) {
 
 //checks to see if current user is host
 //host is first logged in user returned
-function amIHost() {
+function amIHost(uidIn) {
     var check = false;
     usersRef.orderByChild("logged_in").limitToLast(1).once("value", function(snapshot) {
         snapshot.forEach(function(childSnapshot) {
            var key = childSnapshot.key();
-           if(key.localeCompare(uid) == 0) {
+           if(key.localeCompare(uidIn) == 0) {
                 check = true;
            }        
         });
