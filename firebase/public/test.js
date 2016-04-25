@@ -46,6 +46,7 @@ function runTests() {
    testDecodeURL2();
    testLoadPlayer();
    testLoadPlayer2();
+   testCreateCookie();
 
 }
 
@@ -245,4 +246,13 @@ function testLoadPlayer2() {
 		console.log("Load player failed");
 	else
 		console.log("Load player passed");
+}
+
+function testCreateCookie() {
+	createCookie('test', 'dataTest', 1);
+	var data = readCookie('test');
+	if(data === 'dataTest')
+		console.log("testCreateCookie passed");
+	else
+		console.log("testCreateCookie failed");	
 }
